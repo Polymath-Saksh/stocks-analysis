@@ -3,15 +3,17 @@ import Image from 'next/image'
 import styles from './page.module.css'
 import { useState, useEffect } from 'react'
 import { resolve } from 'styled-jsx/css';
+import LineChart from './components/LineChart';
 
 export default function Home() {
-  const [stockInfo, setStockInfo] = useState({})
+  const [stockInfo, setStockInfo] = useState([])
+  
   useEffect(() => {
     async function getInfo() {
       try {
-        const APIKEY = 'MRcvITTGFqPJ_kTd_Mr28pizHcamN_on'
-        const data = await fetch('https://api.polygon.io/v2/aggs/ticker/AAPL/range/1/day/2023-01-09/2023-01-09?apiKey=' + APIKEY)
-        const jsonData = await data.json()
+        const APIKEY = "TBxDsx1YUlUNmatc_OQhkvuyOxYXYydR"
+        const data = await fetch(`https://api.polygon.io/v2/aggs/ticker/AAPL/range/1/minute/2023-08-01/2023-08-02?adjusted=true&sort=asc&limit=120&apiKey=${APIKEY}`)
+        const jsonData = await data.json() 
         setStockInfo(jsonData.results)
       } catch (error) {
         console.error(error)
@@ -20,16 +22,17 @@ export default function Home() {
     getInfo()
   }, [])
 
+  useEffect(() => {
+    console.log("Hey now I'm in a state", stockInfo)
+  }, [stockInfo])
 
   //
-  useEffect(() => {
-    console.log('Hey I am in this state',stockInfo)
-  }, [stockInfo])
   //  code
   //
   return (
     <main className={styles.main}>
-      <h1>Hello World!</h1>
+      <LineChart />
+        
 
     </main>
   )
